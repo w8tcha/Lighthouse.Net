@@ -11,16 +11,17 @@ Lighthouse.NET analyzes web apps and web pages, collecting modern performance me
 
 You need to install lighthouse as Node module on machine ([more info](https://developers.google.com/web/tools/lighthouse/)).
 
-1. Download [Google Chrome](https://www.google.com/chrome/) for Desktop.
 2. Install the current [Long-Term Support](https://github.com/nodejs/LTS) version of [Node](https://nodejs.org/).
 3. Install Lighthouse. The `-g` flag installs it as a global module.
-`npm install -g lighthouse`
+
+``` cmd
+> npm install -g lighthouse playwright-lighthouse
+```
 
 4. Install lighthouse.net into your project via NuGet
-```
+``` cmd
 PM> Install-Package lighthouse.net
 ```
-
 
 ### Basic example
 
