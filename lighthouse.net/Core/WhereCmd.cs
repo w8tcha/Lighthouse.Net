@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 
-namespace lighthouse.net.Core
+namespace Lighthouse.Net.Core;
+
+internal sealed class WhereCmd : TerminalBase
 {
-    internal sealed class WhereCmd : TerminalBase
+    protected override string FileName => "where.exe";
+
+    internal Task<string> GetNodePathAsync()
     {
-        protected override string FileName => "where.exe";
-        internal async Task<string> GetNodePath()
-        {
-            return await this.Execute("node");
-        }
+        return this.ExecuteAsync("node");
     }
 }

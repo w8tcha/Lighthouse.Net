@@ -1,13 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Lighthouse.Net.Objects;
 
-namespace lighthouse.net.Objects
+/// <summary>
+/// Class TimingDetails. This class cannot be inherited.
+/// </summary>
+public sealed class TimingDetails
 {
-    public sealed class TimingDetails
-    {
-        public string Name { get; set; }
-        public decimal? StartTime { get; set; }
-        public decimal? Duration { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the name.
+    /// </summary>
+    /// <value>The name.</value>
+    public string Name { get; set; }
+
+    /// <summary>
+    /// Gets or sets the start time.
+    /// </summary>
+    /// <value>The start time.</value>
+    public decimal? StartTime { get; set; }
+
+    /// <summary>
+    /// Gets or sets the duration.
+    /// </summary>
+    /// <value>The duration.</value>
+    public decimal? Duration { get; set; }
 }

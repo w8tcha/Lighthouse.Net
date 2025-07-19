@@ -1,67 +1,70 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace lighthouse.net.Core
+namespace Lighthouse.Net.Core;
+
+internal abstract class TerminalBase
 {
-    internal abstract class TerminalBase
+    protected abstract string FileName { get; }
+
+    protected async Task<string> ExecuteAsync(string arguments)
     {
-        protected abstract string FileName { get; }
-        protected async Task<string> Execute(string arguments)
+        Logger logger = null;
+        if (this.EnableDebugging)
         {
-            ILogger logger = null;
-            if (this.EnableDebugging)
-            {
-                logger = new Logger("lighthouse-net-output-console");
-            }
-
-            var processInfo = new ProcessStartInfo
-            {
-                FileName = this.FileName,
-                Arguments = arguments,
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                StandardOutputEncoding = Encoding.UTF8,
-                WindowStyle = ProcessWindowStyle.Hidden
-            };
-            var process = Process.Start(processInfo);
-            if (process == null) return await Task.FromResult<string>(null);
-
-            StringBuilder sb = new StringBuilder(), sbError = new StringBuilder();
-
-            logger?.Append($"Command: {this.FileName} {arguments}\r\n\r\n");
-
-            process.OutputDataReceived += (sender, args) =>
-            {
-                sb.Append(args.Data);
-                logger?.Append(args.Data);
-            };
-            process.ErrorDataReceived += (sender, args) =>
-            {
-                sbError.Append(args.Data);
-                logger?.Append(args.Data);
-            };
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-            
-            process.WaitForExit();
-
-            var output = sb.ToString();
-            var err = sbError.ToString();
-            if (!String.IsNullOrEmpty(err))
-            {
-                this.OnError(err);
-            }
-
-            return output;
-        }
-        protected virtual void OnError(string message)
-        {
+            logger = new Logger("lighthouse-net-output-console");
         }
 
-        internal bool EnableDebugging { get; set; }
+        var processInfo = new ProcessStartInfo
+        {
+            FileName = this.FileName,
+            Arguments = arguments,
+            RedirectStandardInput = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            StandardOutputEncoding = Encoding.UTF8,
+            WindowStyle = ProcessWindowStyle.Hidden
+        };
+        var process = Process.Start(processInfo);
+        if (process == null)
+        {
+            return await Task.FromResult<string>(null);
+        }
+
+        StringBuilder sb = new(), sbError = new();
+
+        logger?.Append($"Command: {this.FileName} {arguments}\r\n\r\n");
+
+        process.OutputDataReceived += (_, args) =>
+        {
+            sb.Append(args.Data);
+            logger?.Append(args.Data);
+        };
+        process.ErrorDataReceived += (_, args) =>
+        {
+            sbError.Append(args.Data);
+            logger?.Append(args.Data);
+        };
+        process.BeginOutputReadLine();
+        process.BeginErrorReadLine();
+
+        await process.WaitForExitAsync();
+
+        var output = sb.ToString();
+        var err = sbError.ToString();
+        if (!string.IsNullOrEmpty(err))
+        {
+            this.OnError(err);
+        }
+
+        return output;
     }
+
+    protected virtual void OnError(string message)
+    {
+    }
+
+    internal bool EnableDebugging { get; set; }
 }

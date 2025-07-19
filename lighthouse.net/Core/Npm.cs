@@ -1,37 +1,61 @@
-﻿using lighthouse.net.Objects;
+﻿using Lighthouse.Net.Objects;
+
 using System;
 using System.Threading.Tasks;
 
-namespace lighthouse.net.Core
+namespace Lighthouse.Net.Core;
+
+/// <summary>
+/// Class Npm. This class cannot be inherited.
+/// </summary>
+internal sealed class Npm(string nodePath) : TerminalBase
 {
-    internal sealed class Npm : TerminalBase
+    /// <summary>
+    /// Gets the name of the file.
+    /// </summary>
+    /// <value>The name of the file.</value>
+    protected override string FileName { get; } = nodePath.Replace("node.exe", "npm.cmd");
+
+    /// <summary>
+    /// Get NPM path as an asynchronous operation.
+    /// </summary>
+    /// <returns>A Task&lt;System.String&gt; representing the asynchronous operation.</returns>
+    /// <exception cref="Exception">Couldn't detect global node_modules path.</exception>
+    internal async Task<string> GetNpmPathAsync()
     {
-        protected override string FileName { get; }
-
-        private Npm()
+        var rsp = await this.ExecuteAsync("config get prefix");
+        if (string.IsNullOrEmpty(rsp))
         {
-        }
-        public Npm(string nodePath)
-        {
-            this.FileName = nodePath.Replace("node.exe", "npm.cmd");
+            throw new Exception("Couldn't detect global node_modules path.");
         }
 
-        internal async Task<string> GetNpmPath()
+        return rsp.Trim();
+    }
+
+    /// <summary>
+    /// Get lighthouse version as an asynchronous operation.
+    /// </summary>
+    /// <returns>A Task&lt;NpmPackageVersion&gt; representing the asynchronous operation.</returns>
+    /// <exception cref="Exception">Couldn't detect lighthouse version.</exception>
+    internal async Task<NpmPackageVersion> GetLighthouseVersionAsync()
+    {
+        var rsp = await this.ExecuteAsync("ls --depth=0 -global lighthouse");
+        var index = !string.IsNullOrEmpty(rsp) ? rsp.IndexOf('@') : -1;
+        if (rsp == null || index == -1)
         {
-            var rsp = await this.Execute("config get prefix");
-            if (String.IsNullOrEmpty(rsp)) throw new Exception("Couldn't detect global node_modules path.");
-            return rsp.Trim();
+            throw new Exception("Couldn't detect lighthouse version.");
         }
-        internal async Task<NpmPackageVersion> GetLighthouseVersion()
-        {
-            var rsp = await this.Execute("list -g --depth=0 | find \"lighthouse\"");
-            var index = !String.IsNullOrEmpty(rsp) ? rsp.IndexOf("@") : -1;
-            if (rsp == null || index == -1) throw new Exception("Couldn't detect lighthouse version.");
-            return new NpmPackageVersion(rsp.Substring(index + 1).Trim());
-        }
-        protected override void OnError(string message)
-        {
-            throw new Exception(message);
-        }
+
+        return new NpmPackageVersion(rsp[(index + 1)..].Trim());
+    }
+
+    /// <summary>
+    /// Called when [error].
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <exception cref="Exception"></exception>
+    protected override void OnError(string message)
+    {
+        throw new Exception(message);
     }
 }

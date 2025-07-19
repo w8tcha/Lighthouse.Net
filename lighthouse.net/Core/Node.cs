@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace lighthouse.net.Core
+namespace Lighthouse.Net.Core;
+
+internal sealed class Node : TerminalBase
 {
-    internal sealed class Node : TerminalBase
+    protected override string FileName => "node";
+
+    public Task<string> RunAsync(string jsFilePath)
     {
-        protected override string FileName => "node";
-        public async Task<string> Run(string jsFilePath)
-        {
-            return await this.Execute("--harmony --unhandled-rejections=strict " + jsFilePath).ConfigureAwait(false);
-        }
-        protected override void OnError(string message)
-        {
-            throw new Exception(message);
-        }
+        return this.ExecuteAsync($"--harmony --unhandled-rejections=strict {jsFilePath}");
     }
 
+    protected override void OnError(string message)
+    {
+        throw new Exception(message);
+    }
 }

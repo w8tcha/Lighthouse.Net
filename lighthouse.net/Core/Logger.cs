@@ -1,35 +1,37 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 
-namespace lighthouse.net.Core
+namespace Lighthouse.Net.Core;
+
+internal sealed class Logger
 {
-    internal sealed class Logger : ILogger
+    private readonly string _tempDirectory;
+    private readonly string _fileName;
+    private readonly Lock lockObj = new();
+
+    internal Logger(string name)
     {
-        private readonly string _tempDirectory;
-        private readonly string _fileName;
-        private readonly object lockObj = new object();
+        this._tempDirectory = Path.GetTempPath();
+        this._fileName = $"{name}-{Guid.NewGuid():N}.txt";
+    }
 
-        internal Logger(string name)
+    public bool Append(string content)
+    {
+        try
         {
-            this._tempDirectory = Path.GetTempPath();
-            this._fileName = $"{name}-{Guid.NewGuid():N}.txt";
+            lock (lockObj)
+            {
+                File.AppendAllText(_tempDirectory + _fileName, content);
+            }
+
+            return true;
+        }
+        catch
+        {
+            // ignore
         }
 
-        public bool Append(string content)
-        {
-            try
-            {
-                lock (lockObj)
-                {
-                    File.AppendAllText(_tempDirectory + _fileName, content);
-                }
-                return true;
-            }
-            catch
-            {
-                // ignore
-            }
-            return false;
-        }
+        return false;
     }
 }

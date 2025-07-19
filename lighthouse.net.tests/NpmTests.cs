@@ -1,84 +1,81 @@
-﻿using System;
-using System.Threading.Tasks;
-using lighthouse.net.Objects;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using static lighthouse.net.Objects.AuditRequest;
+﻿using System.Threading.Tasks;
 
-namespace lighthouse.net.tests
+using AwesomeAssertions;
+
+using Lighthouse.Net.Objects;
+
+using Xunit;
+
+namespace Lighthouse.Net.Tests;
+
+public class NpmTests
 {
-    [TestClass]
-    public class NpmTests
+    [Fact]
+    public async Task NpmExistTest()
     {
-        [TestMethod]
-        public async Task NpmExistTest()
+        var lh = new Lighthouse();
+        var res = await lh.RunAsync("http://example.com");
+
+        res.Should().NotBeNull();
+        res.Performance.Should().NotBeNull();
+        (res.Performance > 0.5m).Should().BeTrue();
+
+        res.Accessibility.Should().NotBeNull();
+        (res.Accessibility > 0.5m).Should().BeTrue();
+
+        res.BestPractices.Should().NotBeNull();
+        (res.BestPractices > 0.5m).Should().BeTrue();
+
+        res.Seo.Should().NotBeNull();
+        (res.Seo > 0.2m).Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task OnlyCategoriesTest()
+    {
+        var lh = new Lighthouse();
+        var ar = new AuditRequest("http://example.com")
         {
-            var lh = new Lighthouse();
-            var res = await lh.Run("http://example.com");
+            OnlyCategories =
+            [
+                Category.Performance
+            ],
+            EnableLogging = true
+        };
+        var res = await lh.RunAsync(ar);
 
-            Assert.IsNotNull(res);
-            Assert.IsNotNull(res.Performance);
-            Assert.IsTrue(res.Performance > 0.5m);
+        res.Should().NotBeNull();
+        res.Performance.Should().NotBeNull();
+        (res.Performance > 0.5m).Should().BeTrue();
+        res.Accessibility.Should().BeNull();
+    }
 
-            Assert.IsNotNull(res.Accessibility);
-            Assert.IsTrue(res.Accessibility > 0.5m);
+    [Fact]
+    public async Task ScreenShots()
+    {
+        var lh = new Lighthouse();
+        var res = await lh.RunAsync("http://example.com");
 
-            Assert.IsNotNull(res.BestPractices);
-            Assert.IsTrue(res.BestPractices > 0.5m);
+        res.Should().NotBeNull();
+        res.FinalScreenshot.Should().NotBeNull();
+        string.IsNullOrWhiteSpace(res.FinalScreenshot.Base64Data).Should().BeFalse();
 
-            Assert.IsNotNull(res.Pwa);
-            Assert.IsTrue(res.Pwa > 0.2m);
+        res.Thumbnails.Should().NotBeNull();
+        (res.Thumbnails.Count == 0).Should().BeFalse();
+        string.IsNullOrWhiteSpace(res.Thumbnails[0].Base64Data).Should().BeFalse();
+    }
 
-            Assert.IsNotNull(res.Seo);
-            Assert.IsTrue(res.Seo > 0.2m);
-        }
-
-        [TestMethod]
-        public async Task OnlyCategoriesTest()
+    [Fact]
+    public async Task FormFactorTest()
+    {
+        var lh = new Lighthouse();
+        var ar = new AuditRequest("http://example.com")
         {
-            var lh = new Lighthouse();
-            var ar = new AuditRequest("http://example.com")
-            {
-                OnlyCategories = new []
-                {
-                    Category.Performance,
-                },
-                EnableLogging = true
-            };
-            var res = await lh.Run(ar);
+            EmulatedFormFactor = AuditRequest.FormFactor.Desktop
+        };
 
-            Assert.IsNotNull(res);
-            Assert.IsNotNull(res.Performance);
-            Assert.IsTrue(res.Performance > 0.5m);
-            Assert.IsNull(res.Accessibility);
-        }
-        
-        [TestMethod]
-        public async Task ScreenShots()
-        {
-            var lh = new Lighthouse();
-            var res = await lh.Run("http://example.com");
+        var res = await lh.RunAsync(ar);
 
-            Assert.IsNotNull(res);
-            Assert.IsNotNull(res.FinalScreenshot);
-            Assert.IsFalse(String.IsNullOrWhiteSpace(res.FinalScreenshot.Base64Data));
-            
-            Assert.IsNotNull(res.Thumbnails);
-            Assert.IsFalse(res.Thumbnails.Count == 0);
-            Assert.IsFalse(String.IsNullOrWhiteSpace(res.Thumbnails[0].Base64Data));
-        }
-  
-        [TestMethod]
-        public async Task FormFactorTest()
-        {
-            var lh = new Lighthouse();
-            var ar = new AuditRequest("http://example.com")
-            {
-                EmulatedFormFactor = FormFactor.Desktop
-            };
-
-            var res = await lh.Run(ar);
-
-            Assert.IsNotNull(res);
-        }
+        res.Should().NotBeNull();
     }
 }
