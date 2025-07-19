@@ -25,29 +25,26 @@ PM> Install-Package lighthouse.net
 ### Basic example
 
 ```csharp
-[TestClass]
 public class LighthouseTest
 {
-    [TestMethod]
+    [Fact]
     public async Task ExampleComAudit()
     {
         var lh = new Lighthouse();
         var res = await lh.Run("http://example.com");
-        Assert.IsNotNull(res);
-        Assert.IsNotNull(res.Performance);
-        Assert.IsTrue(res.Performance > 0.5m);
+		
+        res.Should().NotBeNull();
+        res.Performance.Should().NotBeNull();
+        (res.Performance > 0.5m).Should().BeTrue();
 
-        Assert.IsNotNull(res.Accessibility);
-        Assert.IsTrue(res.Accessibility > 0.5m);
+        res.Accessibility.Should().NotBeNull();
+        (res.Accessibility > 0.5m).Should().BeTrue();
 
-        Assert.IsNotNull(res.BestPractices);
-        Assert.IsTrue(res.BestPractices > 0.5m);
+        res.BestPractices.Should().NotBeNull();
+        (res.BestPractices > 0.5m).Should().BeTrue();
 
-        Assert.IsNotNull(res.Pwa);
-        Assert.IsTrue(res.Pwa > 0.5m);
-
-        Assert.IsNotNull(res.Seo);
-        Assert.IsTrue(res.Seo > 0.5m);
+        res.Seo.Should().NotBeNull();
+        (res.Seo > 0.2m).Should().BeTrue();
     }
 }
 ```
