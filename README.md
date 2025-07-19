@@ -11,7 +11,7 @@ Lighthouse.NET analyzes web apps and web pages, collecting modern performance me
 
 You need to install lighthouse as Node module on machine ([more info](https://developers.google.com/web/tools/lighthouse/)).
 
-2. Install the current [Long-Term Support](https://github.com/nodejs/LTS) version of [Node](https://nodejs.org/).
+2. Install the current version of [Node](https://nodejs.org/).
 3. Install Lighthouse. The `-g` flag installs it as a global module.
 
 ``` cmd
@@ -49,7 +49,3 @@ public class LighthouseTest
     }
 }
 ```
-
-
-### Known Issues
-- If you installed lighthouse package with version 9.0.0 and higher it's required to use Node.js version 14 (because Optional Chaining Operator is used in lighthouse package). To install lighthouse package, that supports Node.js v12 please use `npm i lighthouse@8.6.0 -g`
