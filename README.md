@@ -1,12 +1,6 @@
-|         |            |
-| ------------- |:-------------:|
-| <img src="https://developers.google.com/web/progressive-web-apps/images/pwa-lighthouse.png" width="200">      | <img src="https://www.collabralink.com/wp-content/uploads/logo-net.jpg" width="200"> |
+<img src="https://github.com/w8tcha/Lighthouse.Net/raw/refs/heads/master/lighthouse-logo.svg">
 
-
-
-
-
-## lighthouse.net [![Nuget](https://img.shields.io/nuget/v/lighthouse.net.svg)](https://www.nuget.org/packages/lighthouse.net)
+## Lighthouse.Net [![Nuget](https://img.shields.io/nuget/v/lighthouse.net.svg)](https://www.nuget.org/packages/lighthouse.net)
 This is a .net (c#) library for [Google Lighthouse](https://github.com/GoogleChrome/lighthouse) tool.
 
 Lighthouse.NET analyzes web apps and web pages, collecting modern performance metrics and insights on developer best practices from your code.
