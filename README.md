@@ -1,18 +1,30 @@
-<img src="https://github.com/w8tcha/Lighthouse.Net/raw/refs/heads/master/lighthouse-logo.svg">
+# LighthousePlaywright.Net
+<img src="">
 
-## Lighthouse.Net [![Nuget](https://img.shields.io/nuget/v/lighthouse.net.svg)](https://www.nuget.org/packages/lighthouse.net)
-This is a .net (c#) library for [Google Lighthouse](https://github.com/GoogleChrome/lighthouse) tool.
+<br>
+  <p align="center">
+      <img src="https://github.com/w8tcha/Lighthouse.Net/raw/refs/heads/master/lighthouse-logo.svg" alt="logo">
+  <p align="center">
+    Auditing, performance metrics, and best practices for Progressive Web Apps in .NET tests.
+  </p>
+<br>
 
-Lighthouse.NET analyzes web apps and web pages, collecting modern performance metrics and insights on developer best practices from your code.
+[![Nuget](https://img.shields.io/nuget/v/LighthousePlaywright.Net.svg)](https://www.nuget.org/packages/LighthousePlaywright.Net)
+This is a .NET (c#) library for [Google Lighthouse](https://github.com/GoogleChrome/lighthouse) tool.
 
-*Auditing, performance metrics, and best practices for Progressive Web Apps in .NET tests.*
+[Lighthouse](https://developers.google.com/web/tools/lighthouse) is a tool developed by Google that analyzes web apps and web pages, collecting modern performance metrics and insights on developer best practices.
+
+[Playwright](https://www.npmjs.com/package/playwright) is a Node library to automate Chromium, Firefox and WebKit with a single API. Playwright is built to enable cross-browser web automation that is ever-green, capable, reliable and fast.
+
+> [!NOTE]  
+> Project based on https://github.com/dima-horror/lighthouse.net but instead of the need for an installed version of chrome it uses playwright.
 
 ### How to install
 
-You need to install lighthouse as Node module on machine ([more info](https://developers.google.com/web/tools/lighthouse/)).
+You need to install lighthouse and playwright-lighthouse as Node module on machine ([more info](https://developers.google.com/web/tools/lighthouse/)).
 
 2. Install the current version of [Node](https://nodejs.org/).
-3. Install Lighthouse. The `-g` flag installs it as a global module.
+3. Install Lighthouse and playwright-lighthouse. The `-g` flag installs it as a global modules.
 
 ``` cmd
 > npm install -g lighthouse playwright-lighthouse
@@ -20,7 +32,7 @@ You need to install lighthouse as Node module on machine ([more info](https://de
 
 4. Install lighthouse.net into your project via NuGet
 ``` cmd
-PM> Install-Package lighthouse.net
+PM> Install-Package LighthousePlaywright.Net
 ```
 
 ### Basic example
