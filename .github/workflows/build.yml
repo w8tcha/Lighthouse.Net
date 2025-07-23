@@ -1,0 +1,22 @@
+name: build dotnet
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  build:
+
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '9.0.x' ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Build
+        run: dotnet build LighthousePlaywright.Net.slnx
