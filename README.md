@@ -1,6 +1,4 @@
 # LighthousePlaywright.Net
-<img src="">
-
 <br>
   <p align="center">
       <img src="https://github.com/w8tcha/Lighthouse.Net/raw/refs/heads/master/lighthouse-logo.svg" alt="logo">
