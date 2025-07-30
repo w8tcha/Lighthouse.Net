@@ -1,10 +1,8 @@
 ﻿using LighthousePlaywright.Net.Core;
 using LighthousePlaywright.Net.Objects;
 
-using System;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace LighthousePlaywright.Net;
 
@@ -13,6 +11,25 @@ namespace LighthousePlaywright.Net;
 /// </summary>
 public sealed partial class Lighthouse
 {
+    internal Options Options { get; private set; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Lighthouse"/> class.
+    /// </summary>
+    public Lighthouse()
+    {
+       this.Options = new Options();
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Lighthouse"/> class.
+    /// </summary>
+    /// <param name="options">The options.</param>
+    public Lighthouse(Options options)
+    {
+        this.Options = options;
+    }
+
     public Task<AuditResult> RunAsync(string urlWithProtocol)
     {
         return RunAsync(new AuditRequest(urlWithProtocol));
@@ -25,7 +42,7 @@ public sealed partial class Lighthouse
         return RunAfterCheckAsync(request);
     }
 
-    private static async Task<AuditResult> RunAfterCheckAsync(AuditRequest request)
+    private async Task<AuditResult> RunAfterCheckAsync(AuditRequest request)
     {
         string nodePath;
 
@@ -58,7 +75,7 @@ public sealed partial class Lighthouse
         };
         var npmPath = await npm.GetNpmPathAsync().ConfigureAwait(false);
 
-        var sm = new ScriptMaker();
+        var sm = new ScriptMaker(Options);
         var content = sm.Produce(request, npmPath);
         if (!sm.Save(content))
         {

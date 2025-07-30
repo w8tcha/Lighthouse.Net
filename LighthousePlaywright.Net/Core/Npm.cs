@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-using LighthousePlaywright.Net.Objects;
+﻿using LighthousePlaywright.Net.Objects;
 
 namespace LighthousePlaywright.Net.Core;
 

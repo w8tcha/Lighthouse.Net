@@ -1,13 +1,10 @@
 ﻿using LighthousePlaywright.Net.Objects;
 
-using Newtonsoft.Json;
-
-using System;
 using System.IO;
 
 namespace LighthousePlaywright.Net.Core;
 
-internal sealed class ScriptMaker
+internal sealed class ScriptMaker(Options options)
 {
     internal string TempFileName { get; private set; }
 
@@ -22,18 +19,18 @@ internal sealed class ScriptMaker
 
         var jsOptions = new LighthouseJsOptions
         {
-            chromeFlags =
+            ChromeFlags =
             [
                 "--show-paint-rects",
                 "--headless",
                 "--no-sandbox"
             ],
-            maxWaitForLoad = request.MaxWaitForLoad,
-            blockedUrlPatterns = request.BlockedUrlPatterns,
-            disableStorageReset = request.DisableStorageReset,
-            disableDeviceEmulation = request.DisableDeviceEmulation,
+            MaxWaitForLoad = request.MaxWaitForLoad,
+            BlockedUrlPatterns = request.BlockedUrlPatterns,
+            DisableStorageReset = request.DisableStorageReset,
+            DisableDeviceEmulation = request.DisableDeviceEmulation,
             OnlyCategories = request.OnlyCategories,
-            preset = request.EmulatedFormFactor?.ToString().ToLower()
+            Preset = request.EmulatedFormFactor?.ToString().ToLower()
         };
 
         var optionsAsJson = JsonConvert.SerializeObject(jsOptions,
@@ -43,8 +40,23 @@ internal sealed class ScriptMaker
                 NullValueHandling = NullValueHandling.Ignore
             });
 
-        data = data.Replace("{OPTIONS}", optionsAsJson)
-            .Replace("{URL}", request.Url)
+        var reportsAsJson = JsonConvert.SerializeObject(options.Reports,
+            Formatting.None,
+            new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+
+        var thresholdsAsJson = JsonConvert.SerializeObject(options.Thresholds,
+            Formatting.None,
+            new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+
+        data = data.Replace("{OPTIONS}", optionsAsJson).Replace("{REPORTS}", reportsAsJson)
+            .Replace("{THRESHOLDS}", thresholdsAsJson)
+            .Replace("{URL}", request.Url).Replace("{PORT}", options.Port.ToString())
             .Replace("{NODE_MODULES}", $@"{npmPath.Replace("\\", @"\\")}\\node_modules");
 
         return data;
@@ -97,7 +109,7 @@ internal sealed class ScriptMaker
 
          async function launchChromeAndRunLighthouse(url, opts, config = null) {
              return await playwright['chromium'].launch({
-                 args: ['--remote-debugging-port=9222'],
+                 args: ['--remote-debugging-port={PORT}'],
              }).then(async browser => {
                  const page = await browser.newPage();
                  await page.goto(url);
@@ -105,21 +117,9 @@ internal sealed class ScriptMaker
                  return await playAudit({
                      page: page,
                      opts: opts,
-                     thresholds: {
-                         performance: 20,
-                         accessibility: 20,
-                         'best-practices': 20,
-                         seo: 20,
-                         pwa: 20
-                     },
-                     reports: {
-                         formats: {
-                             html: true,
-                             json: true,
-                             csv: true
-                         }
-                     },
-                     port: 9222
+                     thresholds: {THRESHOLDS},
+                     reports: {REPORTS},
+                     port: {PORT}
                  }).then(async results => {
                      await browser.close();
                      return results.lhr;

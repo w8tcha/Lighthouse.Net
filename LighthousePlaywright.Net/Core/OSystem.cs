@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LighthousePlaywright.Net.Core;
+﻿namespace LighthousePlaywright.Net.Core;
 
 /// <summary>
 /// Class OSystem.

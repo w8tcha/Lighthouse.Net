@@ -1,31 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using LighthousePlaywright.Net.Objects;
+
+using System.Collections.Generic;
 using System.Linq;
-
-using LighthousePlaywright.Net.Objects;
-
-using Newtonsoft.Json;
 
 namespace LighthousePlaywright.Net.Core;
 
 internal sealed class LighthouseJsOptions
 {
-    public IEnumerable<string> chromeFlags { get; set; }
-    public int? maxWaitForLoad { get; set; }
-    public IEnumerable<string> blockedUrlPatterns { get; set; }
-    public bool? disableStorageReset { get; set; }
-    public bool? disableDeviceEmulation { get; set; }
+    [JsonProperty(PropertyName = "chromeFlags")]
+    public IEnumerable<string> ChromeFlags { get; set; }
 
-    /// <summary>
-    /// For LH  version 7.0
-    /// </summary>
-    public string emulatedFormFactor { get; set; }
+    [JsonProperty(PropertyName = "maxWaitForLoad")]
+    public int? MaxWaitForLoad { get; set; }
 
-    /// <summary>
-    /// For LH >= version 7.0
-    /// </summary>
-    public string preset { get; set; }
+    [JsonProperty(PropertyName = "blockedUrlPatterns")]
+    public IEnumerable<string> BlockedUrlPatterns { get; set; }
 
-    [JsonIgnore] public IEnumerable<Category> OnlyCategories { get; set; }
+    [JsonProperty(PropertyName = "disableStorageReset")]
+    public bool? DisableStorageReset { get; set; }
+
+    [JsonProperty(PropertyName = "disableDeviceEmulation")]
+    public bool? DisableDeviceEmulation { get; set; }
+
+    [JsonProperty(PropertyName = "preset")]
+    public string Preset { get; set; }
+
+    [JsonIgnore]
+    public IEnumerable<Category> OnlyCategories { get; set; }
 
     public IEnumerable<string> onlyCategories
     {

@@ -59,3 +59,59 @@ public class LighthouseTest
     }
 }
 ```
+
+## Options
+You can parse options to the lighthouse constructor..
+
+```csharp
+ var options = new Options
+ {
+     Port = 9222
+ };
+
+ var lh = new Lighthouse(options);
+```
+
+### Port
+The Chrome Port - **Default:** `9222`
+
+### Thresholds
+```csharp
+ var options = new Options
+{
+    Thresholds = new Thresholds
+    {
+        Performance = 50, 
+        Accessibility = 50, 
+        BestPractices = 50, 
+        Seo = 50, 
+        Pwa = 50
+    }
+};
+
+ var lh = new Lighthouse(options);
+```
+
+If you don't provide any threshold argument to the playAudit command, the test will fail if at least one of your metrics is under 50.
+
+### Reports
+This library can produce Lighthouse CSV, HTML and JSON audit reports. These reports can be useful for ongoing audits and monitoring from build to build.
+
+```csharp
+ var options = new Options
+{
+    Reports = new Reports
+    {
+        Formats = new Formats
+        {
+            Json = true, //defaults to false
+            Html = true, //defaults to false
+            Csv = true //defaults to false
+        },
+        Name = "name-of-the-report", // defaults to $"lighthouse-{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}"
+        Directory = "path/to/directory" // defaults to '../lighthouse'
+    }
+};
+
+ var lh = new Lighthouse(options);
+```

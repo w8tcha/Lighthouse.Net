@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace LighthousePlaywright.Net.Core;
+﻿namespace LighthousePlaywright.Net.Core;
 
 internal sealed class Node : TerminalBase
 {

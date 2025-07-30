@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LighthousePlaywright.Net.Objects;
+﻿namespace LighthousePlaywright.Net.Objects;
 
 /// <summary>
 /// Class NpmPackageVersion.
