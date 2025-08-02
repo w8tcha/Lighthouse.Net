@@ -11,7 +11,7 @@ public class Thresholds
     [JsonProperty(PropertyName = "accessibility")]
     public int Accessibility { get; set; } = 50;
 
-    [JsonProperty(PropertyName = "'best-practices'")]
+    [JsonProperty(PropertyName = "best-practices")]
     public int BestPractices { get; set; } = 50;
 
     [JsonProperty(PropertyName = "seo")]

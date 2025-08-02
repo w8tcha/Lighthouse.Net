@@ -60,6 +60,10 @@ public sealed class AuditRequest
     /// </summary>
     public IEnumerable<Category> OnlyCategories {get; set;}
 
+    /// <summary>
+    /// Gets or sets a value indicating whether [enable logging].
+    /// </summary>
+    /// <value><c>true</c> if [enable logging]; otherwise, <c>false</c>.</value>
     public bool EnableLogging { get; set; }
 
     public enum FormFactor : byte
