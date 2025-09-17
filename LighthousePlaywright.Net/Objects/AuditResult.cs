@@ -35,15 +35,47 @@ public sealed class AuditResult
     /// </summary>
     public decimal? Pwa { get; set; }
 
-
+    /// <summary>
+    /// Gets or sets the index of the benchmark.
+    /// </summary>
+    /// <value>The index of the benchmark.</value>
     public decimal? BenchmarkIndex { get; set; }
+
+    /// <summary>
+    /// Gets or sets the details.
+    /// </summary>
+    /// <value>The details.</value>
     public List<Details> Details { get; set; }
+
+    /// <summary>
+    /// Gets or sets the timing details.
+    /// </summary>
+    /// <value>The timing details.</value>
     public List<TimingDetails> TimingDetails { get; set; }
+
+    /// <summary>
+    /// Gets or sets the total duration.
+    /// </summary>
+    /// <value>The total duration.</value>
     public decimal? TotalDuration { get; set; }
 
+    /// <summary>
+    /// Gets or sets the final screenshot.
+    /// </summary>
+    /// <value>The final screenshot.</value>
     public Screenshot FinalScreenshot { get; set; }
+
+    /// <summary>
+    /// Gets or sets the thumbnails.
+    /// </summary>
+    /// <value>The thumbnails.</value>
     public IReadOnlyList<Screenshot> Thumbnails { get; set; }
 
+    /// <summary>
+    /// Parse the Audit Result.
+    /// </summary>
+    /// <param name="json">The json.</param>
+    /// <returns>LighthousePlaywright.Net.Objects.AuditResult.</returns>
     public static AuditResult Parse(string json)
     {
         if (string.IsNullOrEmpty(json))

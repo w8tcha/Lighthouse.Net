@@ -7,7 +7,7 @@ internal sealed class Logger
 {
     private readonly string _tempDirectory;
     private readonly string _fileName;
-    private readonly Lock lockObj = new();
+    private readonly Lock _lockObj = new();
 
     internal Logger(string name)
     {
@@ -19,9 +19,9 @@ internal sealed class Logger
     {
         try
         {
-            lock (lockObj)
+            lock (_lockObj)
             {
-                File.AppendAllText(_tempDirectory + _fileName, content);
+                File.AppendAllText($"{_tempDirectory}{_fileName}", content);
             }
 
             return true;

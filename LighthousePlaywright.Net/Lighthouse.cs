@@ -11,7 +11,7 @@ namespace LighthousePlaywright.Net;
 /// </summary>
 public sealed partial class Lighthouse
 {
-    internal Options Options { get; private set; }
+    internal Options Options { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Lighthouse"/> class.
@@ -30,11 +30,20 @@ public sealed partial class Lighthouse
         this.Options = options;
     }
 
+    /// <summary>
+    /// Run the lighthouse audit report.
+    /// </summary>
+    /// <param name="urlWithProtocol">The URL with protocol.</param>
+    /// <returns>Task&lt;AuditResult&gt;.</returns>
     public Task<AuditResult> RunAsync(string urlWithProtocol)
     {
         return RunAsync(new AuditRequest(urlWithProtocol));
     }
 
+    /// <summary>
+    ///   Run the lighthouse audit report.
+    /// </summary>
+    /// <param name="request"></param>
     public Task<AuditResult> RunAsync(AuditRequest request)
     {
         ArgumentNullException.ThrowIfNull(request);

@@ -28,6 +28,10 @@ public sealed class AuditRequest
         this.Url = urlWithProtocol;
     }
 
+    /// <summary>
+    /// Gets the URL.
+    /// </summary>
+    /// <value>The URL.</value>
     public string Url { get; }
 
     /// <summary>
@@ -66,10 +70,24 @@ public sealed class AuditRequest
     /// <value><c>true</c> if [enable logging]; otherwise, <c>false</c>.</value>
     public bool EnableLogging { get; set; }
 
+    /// <summary>
+    /// Enum FormFactor
+    /// </summary>
     public enum FormFactor : byte
     {
+        /// <summary>
+        /// The mobile
+        /// </summary>
         Mobile,
+
+        /// <summary>
+        /// The desktop
+        /// </summary>
         Desktop,
+
+        /// <summary>
+        /// The none
+        /// </summary>
         None
     }
 }

@@ -28,6 +28,7 @@ internal sealed class LighthouseJsOptions
     [JsonIgnore]
     public IEnumerable<Category> OnlyCategories { get; set; }
 
+    [JsonProperty(PropertyName = "onlyCategories")]
     public IEnumerable<string> onlyCategories
     {
         get { return OnlyCategories?.Select(s => s.GetDescription()); }
