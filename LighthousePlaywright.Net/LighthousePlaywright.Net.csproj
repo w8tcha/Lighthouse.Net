@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+	<TargetFrameworks>net9.0;net10.0</TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>Dima Horror, w8tcha</Authors>
     <Description>Auditing, performance metrics, and best practices for Progressive Web Apps in .NET tests.</Description>
