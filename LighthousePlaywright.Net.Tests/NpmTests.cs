@@ -4,14 +4,14 @@ using LighthousePlaywright.Net.Objects;
 
 using System.Threading.Tasks;
 
-using Xunit;
+using NUnit.Framework;
 
 namespace LighthousePlaywright.Net.Tests;
 
 public class NpmTests
 {
-    [Fact]
-    public async Task NpmExistTest()
+    [Test]
+    public async Task LighthouseTest()
     {
         var lh = new Lighthouse();
         var res = await lh.RunAsync("http://example.com");
@@ -30,7 +30,7 @@ public class NpmTests
         (res.Seo > 0.2m).Should().BeTrue();
     }
 
-    [Fact]
+    [Test]
     public async Task OnlyCategoriesTest()
     {
         var lh = new Lighthouse();
@@ -50,7 +50,7 @@ public class NpmTests
         res.Accessibility.Should().BeNull();
     }
 
-    [Fact]
+    [Test]
     public async Task ScreenShots()
     {
         var lh = new Lighthouse();
@@ -65,7 +65,7 @@ public class NpmTests
         string.IsNullOrWhiteSpace(res.Thumbnails[0].Base64Data).Should().BeFalse();
     }
 
-    [Fact]
+    [Test]
     public async Task FormFactorTest()
     {
         var lh = new Lighthouse();
