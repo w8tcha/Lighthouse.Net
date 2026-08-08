@@ -11,7 +11,7 @@ internal sealed class Logger
 
     internal Logger(string name)
     {
-        this._tempDirectory = Path.GetTempPath();
+        this._tempDirectory = $"{Directory.CreateTempSubdirectory().FullName}{Path.DirectorySeparatorChar}";
         this._fileName = $"{name}-{Guid.NewGuid():N}.txt";
     }
 

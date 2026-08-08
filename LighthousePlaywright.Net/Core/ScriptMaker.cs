@@ -66,9 +66,9 @@ internal sealed class ScriptMaker(Options options)
     {
         this.TempFileName = null;
 
-        var tempPath = Path.GetTempPath();
+        var tempPath = Directory.CreateTempSubdirectory().FullName;
 
-        var fullPath = $"{tempPath}lighthouse-net-{Guid.NewGuid():N}.js";
+        var fullPath = Path.Combine(tempPath, $"lighthouse-net-{Guid.NewGuid():N}.js");
         try
         {
             File.WriteAllText(fullPath, content);
