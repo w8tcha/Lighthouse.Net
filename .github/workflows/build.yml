@@ -20,3 +20,5 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Build
         run: dotnet build LighthousePlaywright.Net.slnx
+      - name: Test
+        run: dotnet test LighthousePlaywright.Net.slnx

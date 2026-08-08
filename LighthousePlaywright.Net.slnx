@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
+    <File Path=".github/workflows/build.yml" />
   </Folder>
   <Project Path="LighthousePlaywright.Net.tests/LighthousePlaywright.Net.Tests.csproj" />
   <Project Path="LighthousePlaywright.Net/LighthousePlaywright.Net.csproj" />
