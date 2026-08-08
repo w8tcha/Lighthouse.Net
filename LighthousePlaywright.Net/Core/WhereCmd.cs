@@ -1,11 +1,23 @@
-﻿namespace LighthousePlaywright.Net.Core;
+﻿using System.IO;
+using System.Linq;
+
+namespace LighthousePlaywright.Net.Core;
 
 internal sealed class WhereCmd : TerminalBase
 {
     protected override string FileName => "where.exe";
 
-    internal Task<string> GetNodePathAsync()
+    internal async Task<string> GetNodePathAsync()
     {
-        return this.ExecuteAsync("node");
+        var rsp = await this.ExecuteAsync("node").ConfigureAwait(false);
+        if (string.IsNullOrWhiteSpace(rsp))
+        {
+            return null;
+        }
+
+        return rsp
+            .Split('\n')
+            .Select(line => line.Trim())
+            .FirstOrDefault(File.Exists);
     }
 }

@@ -41,6 +41,16 @@ internal abstract class TerminalBase
 
         process.OutputDataReceived += (_, args) =>
         {
+            if (string.IsNullOrEmpty(args.Data))
+            {
+                return;
+            }
+
+            if (sb.Length > 0)
+            {
+                sb.Append('\n');
+            }
+
             sb.Append(args.Data);
             logger?.Append(args.Data);
         };
