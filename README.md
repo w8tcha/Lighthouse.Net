@@ -84,13 +84,13 @@ The Chrome Port - **Default:** `9222`
         Performance = 50, 
         Accessibility = 50, 
         BestPractices = 50, 
-        Seo = 50, 
-        Pwa = 50
+        Seo = 50
     }
 };
 
  var lh = new Lighthouse(options);
 ```
+Note: `Pwa` is left unset by default, since recent versions of Lighthouse removed the `pwa` category — setting it will make the audit fail unless you also pass `OnlyCategories` explicitly including `pwa` on a Lighthouse version that still supports it.
 
 If you don't provide any threshold argument to the playAudit command, the test will fail if at least one of your metrics is under 50.
 

@@ -34,9 +34,10 @@ public class Thresholds
     public int Seo { get; set; } = 50;
 
     /// <summary>
-    /// Gets or sets the pwa.
+    /// Gets or sets the pwa threshold. Not set by default, since recent versions of Lighthouse
+    /// removed the "pwa" category, so requesting it makes the audit fail unless explicitly opted into.
     /// </summary>
     /// <value>The pwa.</value>
     [JsonProperty(PropertyName = "pwa")]
-    public int Pwa { get; set; } = 50;
+    public int? Pwa { get; set; }
 }
