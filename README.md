@@ -73,7 +73,7 @@ You can parse options to the lighthouse constructor..
 ```
 
 ### Port
-The Chrome Port - **Default:** `9222`
+The Chrome Port - **Default:** a free port chosen automatically at construction time, so that concurrent audits don't collide on the same port. Set it explicitly if you need a fixed port.
 
 ### Thresholds
 ```csharp

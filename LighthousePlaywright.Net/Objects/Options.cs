@@ -1,4 +1,7 @@
-﻿namespace LighthousePlaywright.Net.Objects;
+﻿using System.Net;
+using System.Net.Sockets;
+
+namespace LighthousePlaywright.Net.Objects;
 
 /// <summary>
 /// Class Options.
@@ -18,8 +21,19 @@ public class Options
     public Thresholds Thresholds { get; set; } = new();
 
     /// <summary>
-    /// Gets or sets the chrome port.
+    /// Gets or sets the chrome port. Defaults to a free ephemeral port picked at construction time,
+    /// so that concurrent audits (e.g. multiple <see cref="Lighthouse"/> instances running at once)
+    /// don't collide on the same Chrome DevTools Protocol port.
     /// </summary>
     /// <value>The port.</value>
-    public int Port { get; set; } = 9222;
+    public int Port { get; set; } = GetFreePort();
+
+    private static int GetFreePort()
+    {
+        using var listener = new TcpListener(IPAddress.Loopback, 0);
+        listener.Start();
+        var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        listener.Stop();
+        return port;
+    }
 }
