@@ -25,6 +25,6 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Build
         run: dotnet build LighthousePlaywright.Net.slnx
-      - run: npm install -g lighthouse playwright-lighthouse
+      - run: npm install -g lighthouse playwright playwright-lighthouse
       - name: Test
         run: dotnet test LighthousePlaywright.Net.slnx
