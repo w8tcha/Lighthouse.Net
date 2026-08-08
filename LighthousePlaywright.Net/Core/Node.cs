@@ -6,7 +6,7 @@ internal sealed class Node : TerminalBase
 
     public Task<string> RunAsync(string jsFilePath)
     {
-        return this.ExecuteAsync($"--harmony --unhandled-rejections=strict {jsFilePath}");
+        return this.ExecuteAsync($"--harmony --unhandled-rejections=strict \"{jsFilePath}\"");
     }
 
     protected override void OnError(string message)

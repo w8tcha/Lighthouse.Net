@@ -56,7 +56,7 @@ internal sealed class ScriptMaker(Options options)
 
         data = data.Replace("{OPTIONS}", optionsAsJson).Replace("{REPORTS}", reportsAsJson)
             .Replace("{THRESHOLDS}", thresholdsAsJson)
-            .Replace("{URL}", request.Url).Replace("{PORT}", options.Port.ToString())
+            .Replace("{URL}", JsonConvert.SerializeObject(request.Url)).Replace("{PORT}", options.Port.ToString())
             .Replace("{NODE_MODULES}", $@"{npmPath.Replace("\\", @"\\")}\\node_modules");
 
         return data;
@@ -129,8 +129,11 @@ internal sealed class ScriptMaker(Options options)
 
          const opts = {OPTIONS};
 
-         launchChromeAndRunLighthouse('{URL}', opts).then(results => {
+         launchChromeAndRunLighthouse({URL}, opts).then(results => {
              console.log(JSON.stringify(results));
+         }).catch(err => {
+             console.error(err);
+             process.exit(1);
          });
          """;
 }

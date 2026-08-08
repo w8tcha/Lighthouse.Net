@@ -1,4 +1,4 @@
-﻿using LighthousePlaywright.Net.Objects;
+﻿using System.IO;
 
 namespace LighthousePlaywright.Net.Core;
 
@@ -11,7 +11,14 @@ internal sealed class Npm(string nodePath) : TerminalBase
     /// Gets the name of the file.
     /// </summary>
     /// <value>The name of the file.</value>
-    protected override string FileName { get; } = nodePath.Replace("node.exe", "npm.cmd");
+    protected override string FileName { get; } = GetNpmPath(nodePath);
+
+    private static string GetNpmPath(string nodePath)
+    {
+        var directory = Path.GetDirectoryName(nodePath) ?? string.Empty;
+        var npmFileName = OSystem.IsLinux ? "npm" : "npm.cmd";
+        return Path.Combine(directory, npmFileName);
+    }
 
     /// <summary>
     /// Get NPM path as an asynchronous operation.
@@ -27,23 +34,6 @@ internal sealed class Npm(string nodePath) : TerminalBase
         }
 
         return rsp.Trim();
-    }
-
-    /// <summary>
-    /// Get lighthouse version as an asynchronous operation.
-    /// </summary>
-    /// <returns>A Task&lt;NpmPackageVersion&gt; representing the asynchronous operation.</returns>
-    /// <exception cref="Exception">Couldn't detect lighthouse version.</exception>
-    internal async Task<NpmPackageVersion> GetLighthouseVersionAsync()
-    {
-        var rsp = await this.ExecuteAsync("ls --depth=0 -global lighthouse");
-        var index = !string.IsNullOrEmpty(rsp) ? rsp.IndexOf('@') : -1;
-        if (rsp == null || index == -1)
-        {
-            throw new Exception("Couldn't detect lighthouse version.");
-        }
-
-        return new NpmPackageVersion(rsp[(index + 1)..].Trim());
     }
 
     /// <summary>

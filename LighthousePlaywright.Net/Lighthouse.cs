@@ -99,7 +99,14 @@ public sealed partial class Lighthouse
             };
             var stdoutJson = await node.RunAsync(sm.TempFileName).ConfigureAwait(false);
 
-            return AuditResult.Parse(stdoutJson[stdoutJson.IndexOf('{')..]);
+            var jsonStart = stdoutJson?.IndexOf('{') ?? -1;
+            if (jsonStart == -1)
+            {
+                throw new Exception(
+                    $"Lighthouse produced no JSON output. Raw output: {(string.IsNullOrEmpty(stdoutJson) ? "<empty>" : stdoutJson)}");
+            }
+
+            return AuditResult.Parse(stdoutJson[jsonStart..]);
         }
         catch (Exception ex)
         {
@@ -120,6 +127,6 @@ public sealed partial class Lighthouse
         }
     }
 
-    [GeneratedRegex(@"Cannot find module[\s\S]+?node_modules\\lighthouse'")]
+    [GeneratedRegex(@"Cannot find module[\s\S]+?node_modules[\\/]lighthouse'")]
     private static partial Regex CannotFindModuleRegex();
 }

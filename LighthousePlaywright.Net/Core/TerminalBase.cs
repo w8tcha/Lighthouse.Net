@@ -29,7 +29,7 @@ internal abstract class TerminalBase
             StandardOutputEncoding = Encoding.UTF8,
             WindowStyle = ProcessWindowStyle.Hidden
         };
-        var process = Process.Start(processInfo);
+        using var process = Process.Start(processInfo);
         if (process == null)
         {
             return await Task.FromResult<string>(null);
@@ -56,6 +56,16 @@ internal abstract class TerminalBase
         };
         process.ErrorDataReceived += (_, args) =>
         {
+            if (string.IsNullOrEmpty(args.Data))
+            {
+                return;
+            }
+
+            if (sbError.Length > 0)
+            {
+                sbError.Append('\n');
+            }
+
             sbError.Append(args.Data);
             logger?.Append(args.Data);
         };
@@ -66,9 +76,9 @@ internal abstract class TerminalBase
 
         var output = sb.ToString();
         var err = sbError.ToString();
-        if (!string.IsNullOrEmpty(err))
+        if (process.ExitCode != 0)
         {
-            this.OnError(err);
+            this.OnError(string.IsNullOrEmpty(err) ? $"Process exited with code {process.ExitCode}." : err);
         }
 
         return output;

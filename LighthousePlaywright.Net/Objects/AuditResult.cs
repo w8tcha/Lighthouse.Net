@@ -89,6 +89,7 @@ public sealed class AuditResult
         {
             Details = [],
             TimingDetails = [],
+            Thumbnails = [],
             BenchmarkIndex = jObj.environment?.benchmarkIndex,
             Performance = jObj.categories?.performance?.score,
             Accessibility = jObj.categories?.accessibility?.score,
