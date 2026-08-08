@@ -26,5 +26,7 @@ jobs:
       - name: Build
         run: dotnet build LighthousePlaywright.Net.slnx
       - run: npm install -g lighthouse playwright playwright-lighthouse
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
       - name: Test
         run: dotnet test LighthousePlaywright.Net.slnx

@@ -25,7 +25,7 @@ You need to install lighthouse and playwright-lighthouse as Node module on machi
 3. Install Lighthouse and playwright-lighthouse. The `-g` flag installs it as a global modules.
 
 ``` cmd
-> npm install -g lighthouse playwright-lighthouse
+> npm install -g lighthouse playwright playwright-lighthouse
 ```
 
 4. Install lighthouse.net into your project via NuGet
