@@ -8,6 +8,7 @@
 <br>
 
 [![Nuget](https://img.shields.io/nuget/v/LighthousePlaywright.Net.svg)](https://www.nuget.org/packages/LighthousePlaywright.Net)
+
 This is a .NET (c#) library for [Google Lighthouse](https://github.com/GoogleChrome/lighthouse) tool.
 
 [Lighthouse](https://developers.google.com/web/tools/lighthouse) is a tool developed by Google that analyzes web apps and web pages, collecting modern performance metrics and insights on developer best practices.
