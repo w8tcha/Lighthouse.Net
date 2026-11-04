@@ -1,6 +1,7 @@
 ﻿using LighthousePlaywright.Net.Objects;
 
 using System.IO;
+using System.Linq;
 
 namespace LighthousePlaywright.Net.Core;
 
@@ -8,7 +9,7 @@ internal sealed class ScriptMaker(Options options)
 {
     internal string TempFileName { get; private set; }
 
-    internal string Produce(AuditRequest request, string npmPath)
+    internal string Produce(AuditRequest request, string nodeModulesPath)
     {
         if (request == null)
         {
@@ -57,9 +58,18 @@ internal sealed class ScriptMaker(Options options)
         data = data.Replace("{OPTIONS}", optionsAsJson).Replace("{REPORTS}", reportsAsJson)
             .Replace("{THRESHOLDS}", thresholdsAsJson)
             .Replace("{URL}", JsonConvert.SerializeObject(request.Url)).Replace("{PORT}", options.Port.ToString())
-            .Replace("{NODE_MODULES}", $@"{npmPath.Replace("\\", @"\\")}\\node_modules");
+            .Replace("{PLAYWRIGHT_LIGHTHOUSE}", ModulePathAsJson(nodeModulesPath, "playwright-lighthouse"))
+            .Replace("{PLAYWRIGHT}", ModulePathAsJson(nodeModulesPath, "playwright"));
 
         return data;
+    }
+
+    /// <summary>
+    /// Builds the OS-specific path of a global module, encoded as a JS string literal.
+    /// </summary>
+    private static string ModulePathAsJson(string nodeModulesPath, string module)
+    {
+        return JsonConvert.SerializeObject(Path.Combine(nodeModulesPath, module));
     }
 
     public bool Save(string content)
@@ -91,6 +101,15 @@ internal sealed class ScriptMaker(Options options)
         try
         {
             File.Delete(this.TempFileName);
+
+            // Save() creates a dedicated temp subdirectory per script, so remove it as well.
+            var directory = Path.GetDirectoryName(this.TempFileName);
+            if (!string.IsNullOrEmpty(directory) && Directory.Exists(directory) &&
+                !Directory.EnumerateFileSystemEntries(directory).Any())
+            {
+                Directory.Delete(directory);
+            }
+
             return true;
         }
         catch (Exception)
@@ -104,8 +123,8 @@ internal sealed class ScriptMaker(Options options)
     private const string GetTemplate =
          """
 
-         const { playAudit } = require('{NODE_MODULES}\\playwright-lighthouse');
-         const playwright = require('{NODE_MODULES}\\playwright');
+         const { playAudit } = require({PLAYWRIGHT_LIGHTHOUSE});
+         const playwright = require({PLAYWRIGHT});
 
          async function launchChromeAndRunLighthouse(url, opts, config = null) {
              return await playwright['chromium'].launch({

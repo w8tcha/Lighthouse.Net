@@ -21,13 +21,15 @@ internal sealed class Npm(string nodePath) : TerminalBase
     }
 
     /// <summary>
-    /// Get NPM path as an asynchronous operation.
+    /// Gets the global node_modules directory (<c>npm root -g</c>) as an asynchronous operation.
+    /// This resolves correctly on every OS, e.g. <c>%AppData%\npm\node_modules</c> on Windows
+    /// and <c>{prefix}/lib/node_modules</c> on Linux.
     /// </summary>
     /// <returns>A Task&lt;System.String&gt; representing the asynchronous operation.</returns>
     /// <exception cref="Exception">Couldn't detect global node_modules path.</exception>
-    internal async Task<string> GetNpmPathAsync()
+    internal async Task<string> GetGlobalNodeModulesPathAsync()
     {
-        var rsp = await this.ExecuteAsync("config get prefix");
+        var rsp = await this.ExecuteAsync("root -g").ConfigureAwait(false);
         if (string.IsNullOrEmpty(rsp))
         {
             throw new Exception("Couldn't detect global node_modules path.");

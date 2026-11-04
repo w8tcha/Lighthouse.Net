@@ -8,7 +8,8 @@ using NUnit.Framework;
 
 namespace LighthousePlaywright.Net.Tests;
 
-public class NpmTests
+[NUnit.Framework.Category("Integration")]
+public class LighthouseIntegrationTests
 {
     [Test]
     public async Task LighthouseTest()

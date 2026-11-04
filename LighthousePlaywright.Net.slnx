@@ -4,6 +4,6 @@
     <File Path=".github/workflows/build.yml" />
     <File Path=".github/workflows/release.yml" />
   </Folder>
-  <Project Path="LighthousePlaywright.Net.tests/LighthousePlaywright.Net.Tests.csproj" />
+  <Project Path="LighthousePlaywright.Net.Tests/LighthousePlaywright.Net.Tests.csproj" />
   <Project Path="LighthousePlaywright.Net/LighthousePlaywright.Net.csproj" />
 </Solution>

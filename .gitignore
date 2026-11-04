@@ -234,3 +234,5 @@ $RECYCLE.BIN/
 *.lnk
 
 profile.config
+# Test results / coverage
+TestResults/

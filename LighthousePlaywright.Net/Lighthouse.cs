@@ -82,10 +82,10 @@ public sealed partial class Lighthouse
         {
             EnableDebugging = request.EnableLogging
         };
-        var npmPath = await npm.GetNpmPathAsync().ConfigureAwait(false);
+        var nodeModulesPath = await npm.GetGlobalNodeModulesPathAsync().ConfigureAwait(false);
 
         var sm = new ScriptMaker(Options);
-        var content = sm.Produce(request, npmPath);
+        var content = sm.Produce(request, nodeModulesPath);
         if (!sm.Save(content))
         {
             throw new Exception($"Couldn't save JS script to %temp% directory. Path: {sm.TempFileName}");
@@ -99,24 +99,11 @@ public sealed partial class Lighthouse
             };
             var stdoutJson = await node.RunAsync(sm.TempFileName).ConfigureAwait(false);
 
-            var jsonStart = stdoutJson?.IndexOf('{') ?? -1;
-            if (jsonStart == -1)
-            {
-                throw new Exception(
-                    $"Lighthouse produced no JSON output. Raw output: {(string.IsNullOrEmpty(stdoutJson) ? "<empty>" : stdoutJson)}");
-            }
-
-            return AuditResult.Parse(stdoutJson[jsonStart..]);
+            return ParseNodeOutput(stdoutJson);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (IsLighthouseMissing(ex.Message))
         {
-            if (!string.IsNullOrEmpty(ex.Message) && CannotFindModuleRegex().IsMatch(ex.Message))
-            {
-                throw new Exception(
-                    "Lighthouse is not installed. Please, execute `npm install -g lighthouse` in console.");
-            }
-
-            throw;
+            throw new Exception(LighthouseMissingMessage, ex);
         }
         finally
         {
@@ -127,6 +114,33 @@ public sealed partial class Lighthouse
         }
     }
 
-    [GeneratedRegex(@"Cannot find module[\s\S]+?node_modules[\\/]lighthouse'")]
+    internal const string LighthouseMissingMessage =
+        "Lighthouse is not installed. Please, execute `npm install -g lighthouse playwright playwright-lighthouse` in console.";
+
+    /// <summary>
+    /// Extracts and parses the Lighthouse JSON report from the node process output,
+    /// skipping anything logged before the JSON starts.
+    /// </summary>
+    internal static AuditResult ParseNodeOutput(string stdout)
+    {
+        var jsonStart = stdout?.IndexOf('{') ?? -1;
+        if (jsonStart == -1)
+        {
+            throw new Exception(
+                $"Lighthouse produced no JSON output. Raw output: {(string.IsNullOrEmpty(stdout) ? "<empty>" : stdout)}");
+        }
+
+        return AuditResult.Parse(stdout[jsonStart..]);
+    }
+
+    /// <summary>
+    /// Determines whether a node error means one of the required global npm packages is missing.
+    /// </summary>
+    internal static bool IsLighthouseMissing(string message)
+    {
+        return !string.IsNullOrEmpty(message) && CannotFindModuleRegex().IsMatch(message);
+    }
+
+    [GeneratedRegex(@"Cannot find module[\s\S]+?node_modules[\\/](?:playwright-lighthouse|playwright|lighthouse)'")]
     private static partial Regex CannotFindModuleRegex();
 }

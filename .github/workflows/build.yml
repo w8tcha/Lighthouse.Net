@@ -3,14 +3,15 @@ on:
   push:
     branches:
       - master
-      
+
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        dotnet-version: [ '10.0.x' ]
+        os: [windows-latest, ubuntu-latest]
         node-version: [latest]
 
     steps:
@@ -19,14 +20,22 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+      - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
+          dotnet-version: |
+            9.0.x
+            10.0.x
       - name: Build
         run: dotnet build LighthousePlaywright.Net.slnx
       - run: npm install -g lighthouse playwright playwright-lighthouse
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
       - name: Test
-        run: dotnet test LighthousePlaywright.Net.slnx
+        run: dotnet test LighthousePlaywright.Net.slnx --collect:"XPlat Code Coverage" --results-directory TestResults
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.os }}
+          path: TestResults/**/coverage.cobertura.xml
