@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace LighthousePlaywright.Net.Objects;
@@ -83,7 +85,13 @@ public sealed class AuditResult
             return null;
         }
 
-        dynamic jObj = JObject.Parse(json);
+        // Parse floats directly as decimal to avoid lossy double -> decimal conversion
+        // (.NET 11 converts doubles to decimal exactly, e.g. 0.91 -> 0.91000000000000003108...).
+        using var reader = new JsonTextReader(new StringReader(json))
+        {
+            FloatParseHandling = FloatParseHandling.Decimal
+        };
+        dynamic jObj = JObject.Load(reader);
 
         var a = new AuditResult
         {
