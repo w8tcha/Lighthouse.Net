@@ -10,6 +10,7 @@
 [![Nuget](https://img.shields.io/nuget/v/LighthousePlaywright.Net.svg)](https://www.nuget.org/packages/LighthousePlaywright.Net)
 [![Build](https://github.com/w8tcha/Lighthouse.Net/actions/workflows/build.yml/badge.svg)](https://github.com/w8tcha/Lighthouse.Net/actions/workflows/build.yml)
 [![Coverage](https://github.com/w8tcha/Lighthouse.Net/raw/badges/badge_linecoverage.svg)](https://github.com/w8tcha/Lighthouse.Net/actions/workflows/build.yml)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Me-ff5e5b?logo=ko-fi&logoColor=white)](https://ko-fi.com/w8tcha)
 
 This is a .NET (c#) library for [Google Lighthouse](https://github.com/GoogleChrome/lighthouse) tool.
 
